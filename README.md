@@ -41,3 +41,7 @@ node --test test-*.mjs
 ```
 
 Runtime sources are at the repository root. `setup_vendor.py` downloads pinned Three.js 0.187.0, MediaPipe Tasks Vision 1.2.3, the selfie segmentation model, and heic-to 1.6.7 from their publishers. Third-party licenses remain with those dependencies; the bundled Source Sans 3 font includes its license.
+
+## Single-card light and shadow mode
+
+Choose **Single card · light & shadow** in Display. One original Pokécam card-back design repeats across the frame. Source luminance controls its bottom-to-top tilt: dark regions become nearly edge-on; bright regions face the camera. Three.js standard materials, a directional light, and a shadow-receiving backdrop supply the lighting. The mode bypasses card-library matching and eases angle changes. Shadow updates are rate-limited to protect animation frame rate.
