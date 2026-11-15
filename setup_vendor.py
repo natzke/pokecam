@@ -17,7 +17,7 @@ package('https://registry.npmjs.org/three/-/three-0.187.0.tgz',{
     'build/three.module.js':'vendor/three/three.module.js',
     'build/three.core.js':'vendor/three/three.core.js','LICENSE':'vendor/three/LICENSE'})
 package('https://registry.npmjs.org/@mediapipe/tasks-vision/-/tasks-vision-1.2.3.tgz',{
-    'vision_bundle.mjs':'vendor/mediapipe/vision_bundle.mjs',
+    'vision_bundle.mjs':'vendor/mediapipe/vision_bundle.esm.js',
     'wasm/vision_wasm_internal.js':'vendor/mediapipe/wasm/vision_wasm_internal.js',
     'wasm/vision_wasm_internal.wasm':'vendor/mediapipe/wasm/vision_wasm_internal.wasm'})
 model=ROOT/'vendor/mediapipe/selfie_segmenter_landscape.tflite'

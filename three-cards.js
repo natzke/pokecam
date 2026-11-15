@@ -1,8 +1,8 @@
-import {GapFiller} from './gap-fill.js?v=27';
-import {chooseFlipDirection,flipRotation} from './flip-direction.js?v=27';
+import {GapFiller} from './gap-fill.js?v=28';
+import {chooseFlipDirection,flipRotation} from './flip-direction.js?v=28';
 import * as THREE from './vendor/three/three.module.js';
-import {FlipPool,flipBudget,wrapPosition,shouldFlip,sourceColorDelta} from './flip-budget.js?v=27';
-import {PersonMask} from './person-mask.js?v=27';
+import {FlipPool,flipBudget,wrapPosition,shouldFlip,sourceColorDelta} from './flip-budget.js?v=28';
+import {PersonMask} from './person-mask.js?v=28';
 const capacity=65536,slotW=64,slotH=90,slotCols=32;
 export class ThreeCards{
  constructor(input,output,getState){

@@ -2,7 +2,7 @@ let FilesetResolver,ImageSegmenter;
 let segmenter;
 self.onmessage=async({data:d})=>{try{
  if(d.type==='init'){
-  ({FilesetResolver,ImageSegmenter}=await import('./vendor/mediapipe/vision_bundle.mjs'));
+  ({FilesetResolver,ImageSegmenter}=await import('./vendor/mediapipe/vision_bundle.esm.js'));
   const vision=await FilesetResolver.forVisionTasks(new URL('vendor/mediapipe/wasm',self.location.href).href);
   segmenter=await ImageSegmenter.createFromOptions(vision,{baseOptions:{modelAssetPath:new URL('vendor/mediapipe/selfie_segmenter_landscape.tflite',self.location.href).href,delegate:'CPU'},runningMode:'IMAGE',outputCategoryMask:false,outputConfidenceMasks:true});self.postMessage({type:'ready'});return;
  }
