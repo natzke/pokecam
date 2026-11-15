@@ -1,0 +1,74 @@
+{
+  "cards": [
+    "value-00.svg",
+    "value-01.svg",
+    "value-02.svg",
+    "value-03.svg",
+    "value-04.svg",
+    "value-05.svg",
+    "value-06.svg",
+    "value-07.svg",
+    "value-08.svg",
+    "value-09.svg"
+  ],
+  "cards-medium": [
+    "value-00.svg",
+    "value-01.svg",
+    "value-02.svg",
+    "value-03.svg",
+    "value-04.svg",
+    "value-05.svg",
+    "value-06.svg",
+    "value-07.svg",
+    "value-08.svg",
+    "value-09.svg"
+  ],
+  "fragments": [
+    "value-00.svg",
+    "value-01.svg",
+    "value-02.svg",
+    "value-03.svg",
+    "value-04.svg",
+    "value-05.svg",
+    "value-06.svg",
+    "value-07.svg",
+    "value-08.svg",
+    "value-09.svg"
+  ],
+  "fragments-medium": [
+    "value-00.svg",
+    "value-01.svg",
+    "value-02.svg",
+    "value-03.svg",
+    "value-04.svg",
+    "value-05.svg",
+    "value-06.svg",
+    "value-07.svg",
+    "value-08.svg",
+    "value-09.svg"
+  ],
+  "arttiles": [
+    "value-00.svg",
+    "value-01.svg",
+    "value-02.svg",
+    "value-03.svg",
+    "value-04.svg",
+    "value-05.svg",
+    "value-06.svg",
+    "value-07.svg",
+    "value-08.svg",
+    "value-09.svg"
+  ],
+  "arttiles-medium": [
+    "value-00.svg",
+    "value-01.svg",
+    "value-02.svg",
+    "value-03.svg",
+    "value-04.svg",
+    "value-05.svg",
+    "value-06.svg",
+    "value-07.svg",
+    "value-08.svg",
+    "value-09.svg"
+  ]
+}

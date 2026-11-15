@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {chooseFlipDirection,flipRotation} from './flip-direction.js';
+const enabled=['left-right','right-left','top-bottom','bottom-top'];
+assert.equal(chooseFlipDirection([]),null);
+assert.equal(chooseFlipDirection(['unknown']),null);
+for(let i=0;i<4;i++)assert.equal(chooseFlipDirection(enabled,()=>i/4),enabled[i]);
+assert.equal(chooseFlipDirection(['bottom-top'],()=>.9),'bottom-top');
+assert.deepEqual(flipRotation('left-right',1),{x:0,y:1});
+assert.deepEqual(flipRotation('right-left',1),{x:0,y:-1});
+assert.deepEqual(flipRotation('top-bottom',1),{x:1,y:0});
+assert.deepEqual(flipRotation('bottom-top',1),{x:-1,y:0});
+console.log('Enabled-only random selection, no-direction stop, and all four rotation axes verified.');

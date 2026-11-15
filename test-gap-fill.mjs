@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {GapFiller} from './gap-fill.js';
+const regions=[{key:'a',x:0,y:0,size:1},{key:'b',x:1,y:0,size:1},{key:'c',x:2,y:0,size:1}];
+const offsets=new Map([['a',{x:0,y:0}],['b',{x:-100,y:0}],['c',{x:0,y:0}]]);
+const gap=new GapFiller();const args={regions,offsets,cols:3,rows:1,width:300,height:100,now:0,dt:1/60,isBackground:r=>r.key==='b'};
+gap.step(args);assert(gap.moves.has('b'),'Overlapping background card moves toward the uncovered cell');
+const start=offsets.get('b').x;gap.step({...args,now:16});assert(offsets.get('b').x>start&&offsets.get('b').x<0,'Movement eases rather than jumps');assert.equal(offsets.get('a').x,0,'Person card untouched');
+const frozen=offsets.get('b').x;gap.step({...args,now:32,isBackground:()=>false});assert.equal(offsets.get('b').x,frozen,'Stops as soon as the card enters a person region');
+const packed=new GapFiller();packed.step({...args,offsets:new Map(regions.map(r=>[r.key,{x:0,y:0}])),isBackground:()=>true});assert.equal(packed.moves.size,0,'A filled grid remains stable');
+console.log('Background overlap-to-gap movement, easing, person protection, and stable packed grid verified.');

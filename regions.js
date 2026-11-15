@@ -1,0 +1,10 @@
+// Coalesce uniform square blocks in the tile grid, preserving each tile's aspect ratio.
+export function groupRegions(tiles,cols,rows,enabled,tolerance,previous=[]){
+ const used=new Uint8Array(cols*rows),regions=[],features=[],old=new Set(previous.map(r=>`${r.x},${r.y},${r.size}`));
+ function uniform(x,y,size){let low=[255,255,255],high=[0,0,0],minL=255,maxL=0;for(let yy=y;yy<y+size;yy++)for(let xx=x;xx<x+size;xx++){if(used[yy*cols+xx])return false;const tile=tiles[yy*cols+xx];for(let k=0;k<24;k+=3){let lum=0;for(let c=0;c<3;c++){const v=tile.grid[k+c];low[c]=Math.min(low[c],v);high[c]=Math.max(high[c],v);lum+=v*[.2126,.7152,.0722][c]}minL=Math.min(minL,lum);maxL=Math.max(maxL,lum)}}const limit=tolerance*255*(old.has(`${x},${y},${size}`)?1.18:.85);return maxL-minL<=limit&&Math.max(...high.map((v,i)=>v-low[i]))<=limit*1.5}
+ function summarize(x,y,size){if(size===1)return tiles[y*cols+x];const grid=[];for(let gy=0;gy<4;gy++)for(let gx=0;gx<2;gx++){const sum=[0,0,0];for(let sy=gy*size;sy<(gy+1)*size;sy++)for(let sx=gx*size;sx<(gx+1)*size;sx++){const tile=tiles[(y+Math.floor(sy/4))*cols+x+Math.floor(sx/2)],offset=((sy%4)*2+sx%2)*3;for(let c=0;c<3;c++)sum[c]+=tile.grid[offset+c]}grid.push(...sum.map(v=>v/(size*size)))}const mean=[0,0,0];for(let k=0;k<24;k++)mean[k%3]+=grid[k]/8;return {mean,grid,luminance:.2126*mean[0]+.7152*mean[1]+.0722*mean[2]}}
+ for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){if(used[y*cols+x])continue;let size=1;if(enabled)for(const candidate of [4,3,2])if(x+candidate<=cols&&y+candidate<=rows&&uniform(x,y,candidate)){size=candidate;break}const index=regions.length;regions.push({x,y,size,key:`${x},${y},${size}`});features.push(summarize(x,y,size));for(let yy=y;yy<y+size;yy++)for(let xx=x;xx<x+size;xx++)used[yy*cols+xx]=1}
+ const owner=new Int32Array(cols*rows);regions.forEach((r,i)=>{for(let y=r.y;y<r.y+r.size;y++)for(let x=r.x;x<r.x+r.size;x++)owner[y*cols+x]=i});
+ const neighbors=regions.map((r,i)=>{const set=new Set();for(let k=0;k<r.size;k++){if(r.x>0)set.add(owner[(r.y+k)*cols+r.x-1]);if(r.y>0)set.add(owner[(r.y-1)*cols+r.x+k])}return [...set].filter(j=>j<i)});
+ return {regions,tiles:features,neighbors};
+}

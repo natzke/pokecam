@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {canUpgrade} from './detail-cache.js';
+assert(canUpgrade({live:false,fps:0,stableMs:0,gapMs:250}));
+assert(!canUpgrade({live:true,fps:18,stableMs:2000,gapMs:500}));
+assert(!canUpgrade({live:true,fps:30,stableMs:100,gapMs:500}));
+assert(!canUpgrade({live:true,fps:30,stableMs:1000,gapMs:50}));
+assert(canUpgrade({live:true,fps:30,stableMs:500,gapMs:250}));
+console.log('Large detail is gated by live fps, region stability, and decode spacing.');
+const {DetailCache}=await import('./detail-cache.js');
+globalThis.window={requestIdleCallback:callback=>setTimeout(callback,0)};
+let active=0,maxActive=0;const starts=[];
+globalThis.Image=class {constructor(){this.naturalWidth=192;this.naturalHeight=268}async decode(){active++;maxActive=Math.max(maxActive,active);starts.push(performance.now());await new Promise(resolve=>setTimeout(resolve,10));active--}};
+let complete=0;await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('Proxy requests stalled')),2000);const cache=new DetailCache(()=>({live:false,fps:0}),()=>{if(++complete===3){clearTimeout(timeout);resolve()}});cache.update([1,2,3].map(i=>({url:String(i),area:100-i,stableSince:0,kind:'card'})))});
+assert.equal(maxActive,1);assert(starts[1]-starts[0]>=195&&starts[2]-starts[1]>=195);
+console.log('Actual queue decodes one image at a time, with at least 200 ms between starts.');

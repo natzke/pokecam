@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {wrapPosition} from './flip-budget.js';
+const source=(await readFile(new URL('./three-cards.js',import.meta.url),'utf8')).replace(/^import .*;\n/gm,'');
+const {ThreeCards}=await import('data:text/javascript,'+encodeURIComponent('const wrapPosition='+wrapPosition.toString()+';\n'+source));
+const view=Object.create(ThreeCards.prototype);
+view.input={width:200,height:100};view.frame={cols:2,rows:1,regions:[{key:'a',x:0,y:0,size:1}]};view.offsets=new Map([['a',{x:100,y:0}]]);
+const original=Uint8Array.from({length:4*4*4},(_,i)=>i),pixels=original.slice();
+view.remapSamples(pixels,original,2,1);
+assert.deepEqual([...pixels.slice(0,4)],[...original.slice(8,12)],'Displaced person cell samples the fixed source at its new position');
+assert.deepEqual([...pixels.slice(8,16)],[...original.slice(8,16)],'Undisplaced background samples stay fixed');
+view.offsets.get('a').x=-100;view.remapSamples(pixels,original,2,1);
+assert.deepEqual([...pixels.slice(0,4)],[...original.slice(8,12)],'Negative displacement wraps correctly');
+console.log('Person drift source alignment and background isolation verified.');

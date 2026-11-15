@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {BackgroundDelay} from './background-delay.js';
+const gate=new BackgroundDelay(),source={},regions=[{key:'background'},{key:'person'}];
+const apply=(now,choices,extra={})=>{const frame={regions,choices:[...choices],scores:[.9,.8]};gate.apply(frame,{now,delay:1000,source,signature:'cards',isPerson:r=>r.key==='person',...extra});return frame.choices};
+assert.deepEqual(apply(0,[1,2]),[1,2]);
+assert.deepEqual(apply(999,[3,4]),[1,4],'Background waits, person responds immediately');
+assert.deepEqual(apply(1000,[3,5]),[3,5],'Background can change at the exact deadline');
+assert.deepEqual(apply(1100,[4,6]),[3,6],'A new change restarts the cooldown');
+assert.deepEqual(apply(1101,[4,7],{delay:0}),[4,7],'Zero disables delay immediately');
+assert.deepEqual(apply(1102,[9,8],{source:{}}),[9,8],'A new source resets history');
+console.log('Background delay timing, person bypass, zero delay, and source reset verified.');
